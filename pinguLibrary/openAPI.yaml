@@ -1,0 +1,521 @@
+openapi: 3.1.0
+info:
+  title: Pingu Library API
+  description: API for managing a library.
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080/api
+    description: Local development server API
+tags:
+  - name: book
+    description: Operations related to books in the library
+  - name: author
+    description: Operations related to authors in the library
+  - name: publisher
+    description: Operations related to publishers in the library
+  - name: user
+    description: Operations related to users of the library
+  - name: loan
+    description: Operations related to book loans in the library
+paths:
+  /books:
+    get:
+      tags:
+        - book
+      summary: Get a list of all books in the library
+      responses:
+        '200':
+          description: A list of books, successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Book'
+        '404':
+          description: No books found in the library
+        '500':
+          description: Internal server error
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      tags:
+        - book
+      summary: Add a new book to the library
+      requestBody:
+        description: The book object to be added to the library
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Book'
+      responses:
+        '200':
+          description: Book created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+        '400':
+          description: Invalid input, object invalid
+        '500':
+          description: Internal server error
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /books/{bookId}:
+    get:
+      tags:
+        - book
+      summary: Get a specific book by ID
+      parameters:
+        - name: bookId
+          in: path
+          description: The ID of the book to retrieve
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The requested book
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+        '404':
+          description: Book not found
+        '500':
+          description: Internal server error
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      tags:
+        - book
+      summary: Update a specific book by ID
+      parameters:
+        - name: bookId
+          in: path
+          description: The ID of the book to update
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: The updated book object
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Book'
+      responses:
+        '200':
+          description: The updated book
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+        '400':
+          description: Invalid Id supplied
+        '404':
+          description: Book not found
+        '500':
+          description: Internal server error
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      tags:
+        - book
+      summary: Delete a specific book by ID
+      parameters:
+        - name: bookId
+          in: path
+          description: The ID of the book to delete
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Book deleted successfully
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Book not found
+        '500':
+          description: Internal server error
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /books/findByInfo:
+    get:
+      tags:
+        - book
+      summary: Find books by information
+      parameters:
+        - name: title
+          in: query
+          description: The title of the book to search for
+          required: false
+          explode: true
+          schema:
+            type: string
+        - name: author
+          in: query
+          description: The author of the book to search for
+          required: false
+          explode: true
+          schema:
+            type: string
+        - name: publisher
+          in: query
+          description: The publisher of the book to search for
+          required: false
+          explode: true
+          schema:
+            type: string
+        - name: year
+          in: query
+          description: The publication year of the book to search for
+          required: false
+          explode: true
+          schema:
+            type: integer
+        - name: genre
+          in: query
+          description: The genre of the book to search for
+          required: false
+          explode: true
+          schema:
+            type: string
+        - name: language
+          in: query
+          description: The language of the book to search for
+          required: false
+          explode: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A list of books matching the criteria
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Book'
+        '404':
+          description: No books found with the given criteria
+        '500':
+          description: Internal server error
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+
+  /loans:
+    get:
+      tags:
+        - loan
+      summary: Get a list of all book loans in the library
+      responses:
+        '200':
+          description: A list of book loans, successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Loan'
+        '404':
+          description: No book loans found in the library
+        '500':
+          description: Internal server error
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      tags:
+        - loan 
+      summary: Create a new book loan
+      requestBody:
+        description: The loan object to be created
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Loan'   
+      responses:
+        '200':
+          description: Loan created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Loan'
+        '400':
+          description: Invalid input, object invalid    
+        '500':
+          description: Internal server error  
+        default:
+          description: Unexpected error 
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /loans/{loanId}:
+    get:
+      tags:
+        - loans
+      summary: Get a specific book loan by ID
+      parameters:
+        - name: loanId
+          in: path
+          description: The ID of the loan to retrieve
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The requested loan
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Loan'
+        '404':
+          description: Loan not found
+        '500':
+          description: Internal server error
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      tags:
+        - loan
+      summary: Update a specific book loan by ID
+      parameters:
+        - name: loanId
+          in: path
+          description: The ID of the loan to update
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: The updated loan object
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Loan'
+      responses:
+        '200':
+          description: The updated loan
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Loan'
+        '400':
+          description: Invalid Id supplied
+        '404':
+          description: Loan not found
+        '500':
+          description: Internal server error
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      tags:
+        - loans 
+      summary: Delete a specific book loan by ID 
+      parameters:
+        - name: loanId 
+          in: path 
+          description: The ID of the loan to delete 
+          required: true 
+          schema: 
+            type: string 
+      responses:
+        '200': 
+          description: Loan deleted successfully 
+        '400': 
+          description: Invalid ID supplied 
+        '404': 
+          description: Loan not found 
+        '500': 
+          description: Internal server error 
+        default: 
+          description: Unexpected error 
+          content: 
+            application/json: 
+              schema: 
+                $ref: '#/components/schemas/Error'
+  
+components:
+  schemas:
+    Author:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the author
+          examples:
+            - Walter 
+        surname:
+          type: string
+          description: The surname of the author
+          examples:
+            - Tevis
+    Publisher:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the publisher
+          examples:
+            - Oscar Mondadori
+        city:
+          type: string
+          description: The city where the publisher is located
+          examples:
+            - Milan
+    User:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the user
+          examples:
+            - Emma
+        surname:
+          type: string
+          description: The surname of the user
+          examples:
+            - Rossi
+        email:
+          type: string
+          description: The email address of the user
+          examples:
+            - emma.rossi@mymail.com
+        telephone:
+          type: string
+          description: The telephone number of the user
+          examples:
+            - +39 02 12345678
+    Book:
+      type: object
+      properties:
+        title:
+          type: string
+          description: The title of the book
+          examples:
+            - La regina degli scacchi
+        img:
+          type: string
+          description: The image URL of the book cover
+        year:
+          type: integer
+          description: The publication year of the book
+          examples:
+            - 2014
+        genres:
+          type: array
+          items:
+            type: string
+          description: The genres of the book
+          examples:
+            - Drama
+        description:
+          type: string
+          description: A brief description of the book
+            - La regina degli scacchi è un romanzo di Walter Tevis che racconta la storia di una giovane orfana prodigio degli scacchi, Beth Harmon, e della sua ascesa nel mondo degli scacchi durante gli anni '50 e '60.
+        language:
+          type: string
+          description: The language the book is written in 
+          examples:
+              - Italiano 
+        publishers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Publisher'
+          description: The publishers of the book
+          examples:
+            - name: Oscar Mondadori
+        authors:
+          type: array   
+          items:
+            $ref: '#/components/schemas/Author'
+          description: The authors of the book
+          examples:
+            - name: Walter
+              surname: Tevis  
+        availability:
+          type: boolean
+          description: Whether the book is currently available for loan 
+          examples:
+            - false
+    Loan:
+      type: object
+      properties:
+        book:
+          $ref: '#/components/schemas/Book'
+          description: The book that is loaned  
+        user:
+          $ref: '#/components/schemas/User'
+          description: The user who loaned the book
+        loanStartDate:
+          type: string
+          format: date-time
+          description: The date when the book was loaned
+          examples:
+            - 2026-04-01T10:00:00Z
+        loanEndDate:
+          type: string
+          format: date-time
+          description: The date when the book is expected to be returned
+          examples:
+            - 2026-05-01T10:00:00Z
+        returned:
+          type: boolean
+          description: Whether the book has been returned or not
+          examples:
+            - false
+    Error:
+      type: object  
+      properties:
+        code:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Invalid input, object invalid
+      required:
+        - code
+        - message
+        
+        
