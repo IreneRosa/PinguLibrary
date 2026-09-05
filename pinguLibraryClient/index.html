@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Gestione semplice del catalogo e dei prestiti della Pingu Library">
+  <title>Pingu Library</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="site-shell">
+    <header class="site-header">
+      <a class="brand" href="#home" aria-label="Pingu Library home"><span class="brand-mark" aria-hidden="true">🐧<span>📖</span></span><span>Pingu<span class="brand-dot">.</span>Library</span></a>
+      <nav class="nav" aria-label="Navigazione principale">
+        <a class="nav-link active" href="#home">Home</a>
+        <button class="nav-link" data-view="catalog">Catalogo</button>
+        <a class="nav-link" href="#about">Chi siamo</a>
+        <a class="nav-link" href="#contact">Contatti</a>
+      </nav>
+      <button class="login-button" id="login-button">Accedi</button>
+    </header>
+    <main id="home">
+      <section class="hero">
+        <div class="hero-copy"><p class="eyebrow">La biblioteca di quartiere, online</p><h1>Storie che ti aspettano.</h1><p class="hero-text">Esplora il catalogo, trova il tuo prossimo libro e porta un po' di meraviglia a casa.</p></div>
+        <div class="hero-photo" role="img" aria-label="Sala luminosa di una biblioteca con scaffali di libri"></div>
+      </section>
+      <section id="catalog-section">
+      <section id="catalog-view">
+        <header class="section-heading"><div><p class="eyebrow">Il catalogo</p><h2>Cerca tra i nostri libri.</h2></div><button class="primary" id="add-book">+ Nuovo libro</button></header>
+        <div id="catalog-stats" class="stats"></div>
+        <div id="catalog-error" class="error hidden"></div>
+        <form id="search-form" class="toolbar">
+          <input class="input" name="title" placeholder="Cerca per titolo" aria-label="Titolo">
+          <input class="input" name="author" placeholder="Autore" aria-label="Autore">
+          <input class="input" name="genre" placeholder="Genere" aria-label="Genere">
+          <input class="input" name="year" type="number" placeholder="Anno" aria-label="Anno">
+          <button class="primary" type="submit">Cerca</button>
+          <button class="secondary" type="button" id="reset-search">Reset</button>
+        </form>
+        <div id="books-grid" class="books-grid" aria-live="polite"></div>
+      </section>
+      <section id="loans-view" class="hidden">
+        <header class="topbar"><div><p class="eyebrow">Movimenti</p><h1>Prestiti in corso.</h1></div><button class="primary" id="add-loan">+ Nuovo prestito</button></header>
+        <div id="loans-error" class="error hidden"></div>
+        <div id="loans-list" class="loans-list" aria-live="polite"></div>
+      </section>
+      </section>
+      <section class="info-strip" id="about"><div><p class="eyebrow">Chi siamo</p><h2>Un posto per sentirsi a casa.</h2></div><p>Una biblioteca indipendente costruita intorno alla curiosità, alle persone e al piacere di leggere insieme.</p></section>
+      <section class="contact-strip" id="contact"><div><p class="eyebrow">Contatti</p><h2>Passa a trovarci.</h2></div><p>Via delle Storie 12 · Torino<br><a href="mailto:prova@pingulibrary.it">prova@pingulibrary.it</a></p></section>
+    </main>
+    <footer class="site-footer"><span>🐧 Pingu.Library</span><span>© 2026 · I Pinguini volano!</span><span>Biblioteca aperta 09:00–19:00</span></footer>
+  </div>
+  <div id="modal-root"></div>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
